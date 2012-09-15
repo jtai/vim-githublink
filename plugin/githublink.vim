@@ -55,11 +55,19 @@ function s:FileUrl()
 endfunction
 
 " Type backslash g in command mode to display the github.com URL of the current line
-if !hasmapto("<Plug>GitHubLinkFileUrl")
-  map <unique> <Leader>g <Plug>GitHubLinkFileUrl
+if !hasmapto("<Plug>GitHubLink")
+  map <unique> <Leader>g <Plug>GitHubLink
 endif
 
-noremap <unique> <script> <Plug>GitHubLinkFileUrl <SID>FileUrl <SID>Copy
-noremap <SID>FileUrl :redir @a <BAR> echo <SID>FileUrl() <BAR> redir END<CR>
-noremap <SID>Copy :call system('pbcopy', @a) <BAR> echo @a <CR>
+" If pbcopy is available, map key binding to copy URL clipboard using pbcopy
+" Otherwise, map key binding to just echoing the URL
+silent !which pbcopy
+if !v:shell_error
+  noremap <unique> <script> <Plug>GitHubLink <SID>PbcopyFileUrl
+else
+  noremap <unique> <script> <Plug>GitHubLink <SID>EchoFileUrl
+endif
+
+noremap <SID>PbcopyFileUrl :let @a = <SID>FileUrl()<CR>:call system("pbcopy", @a)<CR>:echo "\"" . @a . "\" copied to clipboard"<CR>
+noremap <SID>EchoFileUrl :echo <SID>FileUrl()<CR>
 
