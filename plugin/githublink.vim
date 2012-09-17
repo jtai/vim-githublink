@@ -13,7 +13,7 @@ endif
 
 if !exists("g:githublink_mode")
   " Test to see if pbcopy is available
-  silent !which pbcopy
+  silent !pbcopy -help 2> /dev/null
   if !v:shell_error
     let g:githublink_mode = "pbcopy"
   else
