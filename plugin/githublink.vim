@@ -55,10 +55,9 @@ endfunction
 " Figure out the base URL on github.com for the current repository
 function s:BaseUrl()
   let url = s:GitConfig("remote." . g:githublink_git_remote . ".url")
-  let url = substitute(url, "^https://github.com/", "", "")
-  let url = substitute(url, "^git@github.com:", "", "")
+  let url = substitute(url, "^git@github.com:", "https://github.com/", "")
   let url = substitute(url, "\.git$", "", "")
-  return "https://github.com/" . url
+  return url
 endfunction
 
 " Called when key binding is activated
